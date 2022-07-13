@@ -19,7 +19,7 @@ ul li{
 .app_wrapper-content {
   grid-area: c;
   background-color:aquamarine;
-  margin: 10px;
+  width: 100%;
 }
 
 a.active{

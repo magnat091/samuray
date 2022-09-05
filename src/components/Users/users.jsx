@@ -2,8 +2,7 @@ import React from "react";
 import s from "../Users/users.module.css";
 import userPhoto from "../../assets/images/219983.png"
 import {NavLink} from "react-router-dom";
-import axios from "axios";
-import {usersAPI} from "../../api/api";
+
 
 const Users = (props) => {
     let pagesCount = Math.ceil(props.totalUserCount / props.pageSize);
@@ -30,22 +29,10 @@ const Users = (props) => {
                     <div>
                         {u.followed
                             ? <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => {
-                                props.toggleFollowingProgress(true, u.id)
-                                    usersAPI.deleteStatusSubs(u.id).then(data =>{
-                                        if (data.resultCode == 0) {
-                                            props.follow(u.id)
-                                        }
-                                })
-                                props.toggleFollowingProgress(false, u.id)
+                                props.follow(u.id)
                             }}>Follow</button>
                             : <button disabled={props.followingInProgress.some(id => id === u.id)} onClick={() => {
-                                props.toggleFollowingProgress(true, u.id)
-                                    usersAPI.postStatusSubs(u.id).then(data =>{
-                                        if (data.resultCode == 0) {
-                                            props.unfollow(u.id)
-                                        }
-                                    })
-                                props.toggleFollowingProgress(false, u.id)
+                                props.unfollow(u.id)
                             }}>Unfollow</button>
                         }
                     </div>

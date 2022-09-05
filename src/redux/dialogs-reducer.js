@@ -1,7 +1,7 @@
 import React from 'react';
 
-const ADD_MESSAGE = 'ADD-MESSAGE';
-const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE-NEW-MESSAGE-TEXT';
+const SEND_MESSAGE = 'SEND-MESSAGE';
+
 
 let initialState = {
         dialogsData: [
@@ -20,36 +20,26 @@ let initialState = {
             {id: '5', message: 'Yo',},
             {id: '6', message: 'You',},
         ],
-        newMessageText: "",
 }
 
 
 
-const dialogsReducer = (state= initialState, action) => {
+const dialogsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_MESSAGE:
-            let newMessage = {
-                id: "7",
-                message: state.newMessageText,
-            }
-            return  {
-                ...state,
-                newMessageText: '',
-                messagesData: [...state.messagesData, newMessage ],
-            };
+        case SEND_MESSAGE:
+            let body = action.message;
+                return {
+                    ...state,
+                    messagesData: [...state.messagesData, { id: 7, message: body }],
+                };
 
-        case UPDATE_NEW_MESSAGE_TEXT:
-            return {
-                ...state,
-                newMessageText: action.newMessage,
-            };
+
         default:
             return state;
     }
 }
 
-export const updateNewMessageTextActionCreator = (messageText) =>({type: UPDATE_NEW_MESSAGE_TEXT, newMessage: messageText})
-export const addMessageActionCreator = () => ({type: ADD_MESSAGE})
+export const sendMessage = (message) => ({type: SEND_MESSAGE, message})
 
 
 export default dialogsReducer

@@ -1,0 +1,12 @@
+
+.formControl{
+    border: 3px solid red;
+    margin-bottom: 10px;
+}
+
+.errorMessage {
+    color: white;
+    background-color: red;
+    border-radius: 10px;
+    padding: 5px;
+}

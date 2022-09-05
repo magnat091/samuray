@@ -1,4 +1,5 @@
 import React from 'react';
+import {usersAPI} from "../api/api";
 
 const ADD_USERS = 'ADD-USERS';
 const FOLLOW = 'FOLLOW';
@@ -69,14 +70,50 @@ const usersReducer = (state=initialState, action) => {
     }
 }
 
-export default usersReducer
 
-export const follow = (userId) =>({type: FOLLOW, userId})
-export const unFollow = (userId) =>({type: UNFOLLOW, userId});
+
+export const followSuccess = (userId) =>({type: FOLLOW, userId})
+export const unFollowSuccess = (userId) =>({type: UNFOLLOW, userId});
 export const setUsers = (users) =>({type: SET_USERS, users});
 export const setCurrentPage = (currentPage) =>({type: SET_CURRENT_PAGE, currentPage});
 export const setUsersTotalCount = (totalUsersCount) =>({type: SET_TOTAL_USERS_COUNT, totalUsersCount});
 export const setIsFetching = (isFetching) =>({type: TOGGLE_IS_FETCHING, isFetching});
 export const toggleFollowingProgress = (isFetching, userId) =>({type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId});
 
+export const getUsers = (currentPage,pageSize ) => {
+   return (dispatch) => {
+        dispatch( setIsFetching(true));
+            usersAPI.getUsers(currentPage, pageSize ).then(data =>{
+                dispatch(setIsFetching(false));
+                dispatch(setUsers(data.items))
+                dispatch(setUsersTotalCount(data.totalCount))
+            });
+        }
+}
 
+export const follow = (userid) => {
+    return (dispatch) => {
+        dispatch(toggleFollowingProgress(true, userid))
+        usersAPI.deleteStatusSubs(userid).then(data =>{
+            if (data.resultCode == 0) {
+                dispatch(followSuccess(userid))
+            }
+        })
+        dispatch(toggleFollowingProgress(false, userid))
+    }
+}
+export const unFollow = (userid) => {
+    return (dispatch) => {
+        dispatch(toggleFollowingProgress(true, userid))
+        usersAPI.postStatusSubs(userid).then(data =>{
+            if (data.resultCode == 0) {
+                dispatch(unFollowSuccess(userid))
+            }
+        })
+        dispatch(toggleFollowingProgress(false, userid))
+    }
+}
+
+
+
+export default usersReducer

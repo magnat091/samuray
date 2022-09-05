@@ -1,0 +1,17 @@
+.form{
+    display: flex;
+    flex-direction: column;
+}
+
+.mb {
+    margin-bottom: 10px;
+    width: 300px;
+}
+
+.error{
+    background-color: red;
+    color: white;
+    max-width: 220px;
+    text-align: center;
+    border-radius: 20px;
+}

@@ -1,8 +1,7 @@
 import React from "react";
-import {addPostAC, updateNewPostTextAC} from "../../../redux/profile-reducer";
+import {addPostAC} from "../../../redux/profile-reducer";
 import MyPosts from "./MyPosts";
 import {connect} from "react-redux";
-
 
 
 
@@ -11,17 +10,8 @@ let mapStateToProps = (state) =>{
         posts: state.profilePage.posts,
     }
 }
-let mapDispatchToProps = (dispatch) =>{
-    return{
-        addPost: () => {
-            dispatch(addPostAC());
-        },
-        updateNewPostText: (text) => {
-            dispatch(updateNewPostTextAC(text));
-        },
-    }
-}
 
-const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts)
 
-export default DialogsContainer;
+const PostContainer = connect(mapStateToProps, {addPostAC})(MyPosts)
+
+export default PostContainer;

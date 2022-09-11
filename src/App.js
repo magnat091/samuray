@@ -2,19 +2,29 @@ import React from "react";
 import './App.css';
 import HeaderContainer from './components/Header/headerContainer'
 import Nav from "./components/Nav/navbar";
-import {Routes,  Route} from "react-router-dom";
+import {Routes, Route, useParams} from "react-router-dom";
 import Musics from "./components/Musics/musics";
 import Settings from "./components/Settings/settings";
 import DialogsContainer from "./components/Dialogs/dialogsContainer";
 import UsersContainer from "./components/Users/usersContainer";
 import ProfileContainer from "./components/Profile/profileContainer";
 import Login from "./components/Login/Login";
+import {connect} from "react-redux";
+import {compose} from "redux";
+import {initializeApp} from "./redux/app-reducer";
+import Preloader from "./components/Common/preloader";
 
-class App extends React.Component<{}> {
+
+
+
+
+class App extends React.Component {
     componentDidMount() {
-            this.props.authUsers();
+            this.props.initializeApp();
         }render() {
-        return (
+         if (!this.props.initialized){
+             return <Preloader/>
+         } return (
             <div className={'app_wrapper'}>
                 <HeaderContainer/>
                 <Nav state={this.props.state}/>
@@ -35,4 +45,7 @@ class App extends React.Component<{}> {
 }
 
 
-export default App;
+const mapStatetoProps = (state) =>({
+    initialized:state.appPage.initialized
+})
+export default compose (connect(mapStatetoProps, {initializeApp}) (App));

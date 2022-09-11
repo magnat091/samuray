@@ -4,24 +4,28 @@ import {
     follow,
     setCurrentPage,
     unFollow,
-    toggleFollowingProgress,
-    getUsers,
+    toggleFollowingProgress, requestUsers,
 } from '../../redux/users-reducer';
 import Users from './users';
 import Preloader from "../Common/preloader";
 import {compose} from "redux";
-import {getUserProfile} from "../../redux/profile-reducer";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
-import {withRouter} from "../Profile/profileContainer";
+import {
+    getCurrentPage,
+    getFollowingInProgress,
+    getIsFetching,
+    getPageSize,
+    getTotalUserCount, getUsers
+} from "../../redux/users-selectors";
 
 
 class UsersContainer extends React.Component{
 
     componentDidMount() {
-        this.props.getUsers(this.props.currentPage,this.props.pageSize )
+        this.props.requestUsers(this.props.currentPage,this.props.pageSize )
     }
     onPageChanged = (pageNumber) => {
-        this.props.getUsers(pageNumber,this.props.pageSize )
+        this.props.requestUsers(pageNumber,this.props.pageSize )
     }
     render() {
 
@@ -43,12 +47,12 @@ class UsersContainer extends React.Component{
 
 let mapStateToProps = (state) =>{
     return{
-        users: state.usersPage.users,
-        pageSize: state.usersPage.pageSize,
-        totalUserCount: state.usersPage.totalUserCount,
-        currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching,
-        followingInProgress: state.usersPage.followingInProgress,
+        users: getUsers(state),
+        pageSize: getPageSize(state),
+        totalUserCount: getTotalUserCount(state),
+        currentPage: getCurrentPage(state),
+        isFetching: getIsFetching(state),
+        followingInProgress: getFollowingInProgress(state),
     }
 }
 
@@ -58,5 +62,5 @@ export default compose(
     withAuthRedirect,
     connect(mapStateToProps,
         {follow, unFollow, setCurrentPage,
-            toggleFollowingProgress, getUsers}),
+            toggleFollowingProgress, requestUsers}),
     withAuthRedirect)(UsersContainer)

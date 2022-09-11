@@ -3,7 +3,6 @@ import { usersAPI} from "../api/api";
 
 
 const SET_USER_DATA = 'SET-USER-DATA';
-const SET_ERROR_MESSAGE = 'SET-ERROR-MESSAGE'
 
 
 let initialState = {
@@ -31,7 +30,7 @@ const authReducer = (state=initialState, action) => {
 
 export const authUsers = () => {
     return (dispatch) => {
-        usersAPI.getStatusAuth().then(data => {
+        return usersAPI.getStatusAuth().then(data => {
             if (data.resultCode === 0){
                 let {id, email, login} = data.data;
                 dispatch(setUserDataAC(id, email, login, true))

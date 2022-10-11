@@ -2,7 +2,7 @@ import React from 'react';
 import { usersAPI} from "../api/api";
 
 
-const SET_USER_DATA = 'SET-USER-DATA';
+const SET_USER_DATA = 'samurai-network/auth/SET-USER-DATA';
 
 
 let initialState = {
@@ -28,27 +28,22 @@ const authReducer = (state=initialState, action) => {
 
 }
 
-export const authUsers = () => {
-    return (dispatch) => {
-        return usersAPI.getStatusAuth().then(data => {
-            if (data.resultCode === 0){
-                let {id, email, login} = data.data;
-                dispatch(setUserDataAC(id, email, login, true))
-            }
-        })
+export const authUsers = () => async (dispatch) => {
+    let data = await usersAPI.getStatusAuth();
+    if (data.resultCode === 0) {
+        let {id, email, login} = data.data;
+        dispatch(setUserDataAC(id, email, login, true))
+
     }
 }
 
-export const login = (email, password, rememberMe, setStatus, setSubmitting) => {
-    return (dispatch) => {
-        usersAPI.login(email, password, rememberMe, true).then(data => {
-            if (data.resultCode === 0){
-               dispatch(authUsers());
-            } else {
-                setStatus(data.messages) };
-            setSubmitting(false);
-        })
-    }
+export const login = (email, password, rememberMe, setStatus, setSubmitting) => async (dispatch) => {
+        let data = await usersAPI.login(email, password, rememberMe, true);
+        if (data.resultCode === 0){
+           dispatch(authUsers());
+        } else {
+            setStatus(data.messages) };
+        setSubmitting(false);
 }
 
 
